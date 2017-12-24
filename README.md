@@ -7,4 +7,4 @@ This program provides an easy way to set up
    sub-functions (tool structure), and
  * complete setup.py-based python projects
 
-It used to be part of the backscratcher collection.
+It used to be part of the [backscratcher](https://github.com/tbarron/backscratcher) collection.
