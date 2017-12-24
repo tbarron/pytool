@@ -1,5 +1,7 @@
 *~
-.env
-venv
 .cache
+.env
+DODO
 __pycache__
+venv
+pytool.egg-info
