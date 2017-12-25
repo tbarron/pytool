@@ -7,6 +7,17 @@ import subprocess as proc
 import pytool
 import tbx
 
+# -----------------------------------------------------------------------------
+def test_flake8():
+    """
+    Scan payload and test code for lint
+    """
+    phandle = proc.Popen(shlex.split(mcat['flake']),
+                         stdout=proc.PIPE, stderr=proc.PIPE)
+    out, err = phandle.communicate()
+    assert err.decode() == ""
+    assert out.decode() == ""
+
 
 # -----------------------------------------------------------------------------
 def test_runnable():
