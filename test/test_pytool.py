@@ -1,7 +1,11 @@
 import pexpect
+import py
 import pytest
 import shlex
 import subprocess as proc
+
+import pytool
+import tbx
 
 
 # -----------------------------------------------------------------------------
@@ -29,8 +33,31 @@ def test_flake8():
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_init(tmpdir):
+def test_pytool_ini_home(tmpdir):
     """
+    pytool.ini_path() should accurately raise a FileNotFoundError when
+    $PYTOOL_DIR is not set and $HOME does not contain .pytool/pytest.ini
+    """
+    homedir = tmpdir.join("home")
+    with tbx.envset(HOME=homedir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            path = py.path.local(pytool.ini_path())
+            assert path.basename == "pytool.ini"
 
+    assert "No such file or directory" in str(err)
+    assert homedir.strpath in str(err)
+
+# -----------------------------------------------------------------------------
+def test_pytool_ini_envdir(tmpdir):
     """
-    pytest.fail('construction')
+    pytool.ini_path() should accurate raise a FileNotFoundError when
+    $PYTOOL_DIR is set but does not contain .pytool/pytest.ini
+    """
+    ptdir = tmpdir.join("envdir")
+    with tbx.envset(PYTOOL_DIR=tmpdir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            path = py.path.local(pytool.ini_path())
+            assert path.basename == "pytool.ini"
+
+    assert "No such file or directory" in str(err)
+    assert ptdir.strpath in str(err)
