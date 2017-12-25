@@ -19,15 +19,20 @@ def cfgdir():
     var PYTOOL_DIR is set, return its contents. Otherwise, if HOME is set,
     return HOME/.pytool. If neither PYTOOL_DIR nor HOME is set, raise
     FileNotFoundError
+
+    If we return a path, we also return a second item indicating the source of
+    the path, either 'env' if the config dir path was specified by env var
+    PYTOOL_DIR or 'home' if the config dir path was taken from env var HOME +
+    '.pytool'
     """
     trydir = os.getenv("PYTOOL_DIR")
     if trydir:
-        return(trydir)
+        return(trydir, "env")
 
     homedir = os.getenv("HOME")
     if homedir:
         ptdir = os.path.join(homedir, ".pytool")
-        return(ptdir)
+        return(ptdir, "home")
 
     raise FileNotFoundError("Please set PYTOOL_DIR or HOME")
 
@@ -39,7 +44,7 @@ def ini_path():
     file in the path returned by cfgdir(). If it does not exist, we raise a
     FileNotFoundError.
     """
-    cdir = cfgdir()
+    (cdir, _) = cfgdir()
     fpath = py.path.local(os.path.join(cdir, "pytool.ini"))
     if fpath.exists():
         return fpath.strpath
@@ -53,7 +58,7 @@ def setup_config_dir():
     """
     Create (if necessary) and populate the config dir
     """
-    cdir = py.path.local(cfgdir())  # cfgdir
+    cdir, src = cfgdir()
     try:
         cdir.ensure(dir=True)
     except py.error.EEXIST:
