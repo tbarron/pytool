@@ -60,6 +60,42 @@ def test_pytool_cfgdir_neither():
 
 # -----------------------------------------------------------------------------
 def test_pytool_ini_home(tmpdir):
+def test_pytool_cfgdir_justpt_nosuch(tmpdir):
+    """
+    pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
+    set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
+    """
+    ptdir = tmpdir.join("envdir")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath, HOME=None):
+        assert pytool.cfgdir() == ptdir.strpath
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_cfgdir_justhome_nosuch(tmpdir):
+    """
+    pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
+    set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
+    """
+    hdir = tmpdir.join("homedir")
+    ptdir = hdir.join(".pytool")
+    with tbx.envset(PYTOOL_DIR=None, HOME=hdir.strpath):
+        assert pytool.cfgdir() == ptdir.strpath
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_cfgdir_both(tmpdir):
+    """
+    pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
+    set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
+
+    With both PYTOOL_DIR and HOME set, cfgdir should return PYTOOL_DIR
+    """
+    ptdir = tmpdir.join("envdir")
+    hdir = tmpdir.join("homedir")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath, HOME=hdir.strpath):
+        assert pytool.cfgdir() == ptdir.strpath
+
+
             assert path.basename == mcat['ptini']
     assert mcat['please'] in str(err)
     """
