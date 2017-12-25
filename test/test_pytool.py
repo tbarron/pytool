@@ -66,7 +66,9 @@ def test_pytool_cfgdir_justpt_nosuch(tmpdir):
     """
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath, HOME=None):
-        assert pytool.cfgdir() == ptdir.strpath
+        cdir, src = pytool.cfgdir()
+        assert cdir == ptdir.strpath
+        assert src == "env"
 
 
 # -----------------------------------------------------------------------------
@@ -78,7 +80,9 @@ def test_pytool_cfgdir_justhome_nosuch(tmpdir):
     hdir = tmpdir.join("homedir")
     ptdir = hdir.join(".pytool")
     with tbx.envset(PYTOOL_DIR=None, HOME=hdir.strpath):
-        assert pytool.cfgdir() == ptdir.strpath
+        cdir, src = pytool.cfgdir()
+        assert cdir == ptdir.strpath
+        assert src == "home"
 
 
 # -----------------------------------------------------------------------------
@@ -92,7 +96,9 @@ def test_pytool_cfgdir_both(tmpdir):
     ptdir = tmpdir.join("envdir")
     hdir = tmpdir.join("homedir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath, HOME=hdir.strpath):
-        assert pytool.cfgdir() == ptdir.strpath
+        cdir, src = pytool.cfgdir()
+        assert cdir == ptdir.strpath
+        assert src == "env"
 
 
 # -----------------------------------------------------------------------------
