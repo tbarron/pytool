@@ -46,5 +46,103 @@ def ini_path():
         raise FileNotFoundError(msg)
 
 
+# -----------------------------------------------------------------------------
+def setup_config_dir():
+    """
+    Create (if necessary) and populate the config dir
+    """
+    cdir = py.path.local(cfgdir())  # cfgdir
+    try:
+        cdir.ensure(dir=True)
+    except py.error.EEXIST:
+        msg = "{} is a file, cannot mkdir".format(cdir.strpath)
+        raise FileExistsError(msg)
+
+    ptini = cdir.join("pytool.ini")
+    ptini.write([x + "\n"
+                 for x in ["[pytool]",
+                           "templates_dir = {}/{}".format(cdir.strpath,
+                                                          "templates")]])
+
+    tmpl = cdir.join("templates")  # .../templates
+    tmpl.ensure(dir=True)
+
+    pdir = tmpl.join("prjdir")    # .../templates/prjdir
+    pdir.ensure(dir=True)
+
+    ppdir = pdir.join("prjdir")   # .../templates/prjdir/prjdir
+    ppdir.ensure(dir=True)
+
+    tdir = pdir.join("test")      # .../templates/prjdir/test
+    tdir.ensure(dir=True)
+
+    prog = tmpl.join("prog.py")   # .../templates/prog.py
+    prog.write(file_prog_py())
+
+    tool = tmpl.join("tool.py")   # .../templates/tool.py
+    tool.write(file_tool_py())
+
+    init = ppdir.join("__init__.py")  # .../templates/prjdir/prjdir/__init__.py
+    init.write(file_init_py())
+
+    rdme = pdir.join("README.md")  # .../templates/prjdir/README.md
+    rdme.write(file_readme())
+
+    stup = pdir.join("setup.py")  # .../templates/prjdir/setup.py
+    stup.write(file_setup_py())
+
+    stub = tdir.join("test_stub.py")  # .../templates/prjdir/test/test_stub.py
+    stub.write(file_test_stub_py())
+
+
+# -----------------------------------------------------------------------------
+def file_prog_py():
+    """
+    Return content for prog.py
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
+def file_tool_py():
+    """
+    Return content for tool.py
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
+def file_init_py():
+    """
+    Return content for __init__.py
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
+def file_readme():
+    """
+    Return content for README.md
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
+def file_setup_py():
+    """
+    Return content for setup.py
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
+def file_test_stub_py():
+    """
+    Return content for test_stub.py
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
 if __name__ == "__main__":
     main()
