@@ -68,6 +68,15 @@ def initialize():
     return cfg
 
 
+# -----------------------------------------------------------------------------
+def load_config(ptini):
+    """
+    Load the config info from cfgdir()/pytool.ini
+    """
+    pass
+
+
+# -----------------------------------------------------------------------------
 def setup_config_dir():
     """
     Create (if necessary) and populate the config dir
