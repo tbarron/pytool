@@ -59,7 +59,6 @@ def test_pytool_cfgdir_neither():
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_ini_home(tmpdir):
 def test_pytool_cfgdir_justpt_nosuch(tmpdir):
     """
     pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
@@ -96,8 +95,21 @@ def test_pytool_cfgdir_both(tmpdir):
         assert pytool.cfgdir() == ptdir.strpath
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_ini_unset(tmpdir):
+    """
+    Neither PYTOOL_DIR nor HOME is set. Should get 'Please set PYTOOL_DIR or
+    HOME', thrown by cfgdir()
+    """
+    with tbx.envset(HOME=None, PYTOOL_DIR=None):
+        with pytest.raises(FileNotFoundError) as err:
+            path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
     assert mcat['please'] in str(err)
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_ini_home_nodir(tmpdir):
     """
     pytool.ini_path() should accurately raise a FileNotFoundError when
     $PYTOOL_DIR is not set and $HOME does not contain .pytool/pytest.ini
@@ -112,39 +124,104 @@ def test_pytool_cfgdir_both(tmpdir):
             path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
     assert mcat['nosuch'] in str(err)
+    assert ptdir.strpath in str(err)
 
-    assert "No such file or directory" in str(err)
-    assert homedir.strpath in str(err)
 
 # -----------------------------------------------------------------------------
-def test_pytool_ini_envdir(tmpdir):
+def test_pytool_ini_home_no_pt(tmpdir):
     """
-    pytool.ini_path() should accurate raise a FileNotFoundError when
-    $PYTOOL_DIR is set but does not contain .pytool/pytest.ini
-            assert path.basename == mcat['ptini']
-    assert mcat['nosuch'] in str(err)
-
-
-            assert path.basename == mcat['ptini']
-    assert mcat['nosuch'] in str(err)
-
-
-        assert path.basename == mcat['ptini']
-
-
+    $HOME exists but subdir .pytool does not. ini_path should raise
+    FileNotFoundError
     """
-    ptdir = tmpdir.join("envdir")
-    with tbx.envset(PYTOOL_DIR=tmpdir.strpath):
+    homedir = tmpdir.join("home")
+    homedir.ensure(dir=True)
+    ptdir = homedir.join(".pytool")
+    with tbx.envset(HOME=homedir.strpath):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
     assert mcat['nosuch'] in str(err)
+    assert ptdir.strpath in str(err)
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_ini_home_noini(tmpdir):
+    """
+    $HOME exists, subdir .pytool exists, pytool.ini not present
+    """
+    homedir = tmpdir.join("home")
+    ptdir = homedir.join(".pytool")
+    ptdir.ensure(dir=True)
+    with tbx.envset(HOME=homedir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
     assert mcat['nosuch'] in str(err)
     assert ptdir.strpath in str(err)
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_ini_home_found(tmpdir):
+    """
+    $HOME exists, subdir .pytool exists, pytool.ini is present, should return
+    path for pytool.ini
+    """
+    homedir = tmpdir.join("home")
+    ptdir = homedir.join(".pytool")
+    ptfile = ptdir.join("pytool.ini")
+    ptfile.ensure(dir=False)
+    with tbx.envset(HOME=homedir.strpath):
+        path = py.path.local(pytool.ini_path())
         assert path.basename == mcat['ptini']
+        assert path.strpath == ptfile.strpath
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_ini_envdir_nodir(tmpdir):
+    """
+    pytool.ini_path() should accurately raise a FileNotFoundError when
+    $PYTOOL_DIR is set but does not contain pytest.ini
+    """
+    ptdir = tmpdir.join("envdir")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            path = py.path.local(pytool.ini_path())
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
+    assert ptdir.strpath in str(err)
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_ini_envdir_nofile(tmpdir):
+    """
+    pytool.ini_path() should accurately raise a FileNotFoundError when
+    $PYTOOL_DIR is set but does not contain pytest.ini
+
+    What about $PYTOOL_DIR exists but pytool.ini does not?
+    """
+    ptdir = tmpdir.join("envdir")
+    ptdir.ensure(dir=True)
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            path = py.path.local(pytool.ini_path())
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
+    assert ptdir.strpath in str(err)
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_ini_envdir_found(tmpdir):
+    """
+    pytool.ini_path() should return the path of pytool.ini in directory
+    $PYTOOL_DIR if it's there.
+    """
+    ptdir = tmpdir.join("envdir")
+    ptini = ptdir.join("pytool.ini")
+    ptini.ensure(dir=False)
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        path = py.path.local(pytool.ini_path())
+        assert path.basename == mcat['ptini']
+        assert path.strpath == ptini.strpath
 
 
 
