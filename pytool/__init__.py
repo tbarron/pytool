@@ -30,5 +30,21 @@ def cfgdir():
     raise FileNotFoundError("Please set PYTOOL_DIR or HOME")
 
 
+# -----------------------------------------------------------------------------
+def ini_path():
+    """
+    The task for this function is to return the path of an existing pytool.ini
+    file in the path returned by cfgdir(). If it does not exist, we raise a
+    FileNotFoundError.
+    """
+    cdir = cfgdir()
+    fpath = py.path.local(os.path.join(cdir, "pytool.ini"))
+    if fpath.exists():
+        return fpath.strpath
+    else:
+        msg = "No such file or directory: '{}'".format(fpath)
+        raise FileNotFoundError(msg)
+
+
 if __name__ == "__main__":
     main()
