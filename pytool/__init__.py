@@ -54,6 +54,20 @@ def ini_path():
 
 
 # -----------------------------------------------------------------------------
+def initialize():
+    """
+    Find the path of pytool.ini if it exists
+    """
+    try:
+        ptini = ini_path()
+    except FileNotFoundError:
+        setup_config_dir()
+
+    ptini = ini_path()
+    cfg = load_config(ptini)
+    return cfg
+
+
 def setup_config_dir():
     """
     Create (if necessary) and populate the config dir
