@@ -19,6 +19,7 @@ def test_runnable():
 # -----------------------------------------------------------------------------
 def test_flake8():
     """
+    Scan payload and test code for lint
     """
     phandle = proc.Popen(shlex.split("flake8 pytool test"),
                          stdout=proc.PIPE, stderr=proc.PIPE)
