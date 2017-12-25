@@ -47,15 +47,14 @@ def test_runnable():
 
 
 # -----------------------------------------------------------------------------
-def test_flake8():
+def test_pytool_cfgdir_neither():
     """
-    Scan payload and test code for lint
+    pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
+    set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
     """
-    phandle = proc.Popen(shlex.split("flake8 pytool test"),
-                         stdout=proc.PIPE, stderr=proc.PIPE)
-    out, err = phandle.communicate()
-    assert err.decode() == ""
-    assert out.decode() == ""
+    with tbx.envset(PYTOOL_DIR=None, HOME=None):
+        with pytest.raises(FileNotFoundError) as err:
+            pytool.cfgdir()
     assert mcat['please'] in str(err)
 
 
