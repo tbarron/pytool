@@ -73,6 +73,12 @@ def setup_config_dir():
     Create (if necessary) and populate the config dir
     """
     cdir, src = cfgdir()
+    cdir = py.path.local(cdir)
+    hdir = py.path.local(cdir.dirname)
+    if src == "home" and not hdir.exists():
+        raise FileNotFoundError("{} {}".format(hdir.strpath,
+                                               "is not a directory"))
+
     try:
         cdir.ensure(dir=True)
     except py.error.EEXIST:
