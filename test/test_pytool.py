@@ -325,7 +325,7 @@ def test_pytool_initialize_homedir_isfile(tmpdir):
     """
     hdir = tmpdir.join("home")
     hdir.ensure(dir=False)
-    with tbx.envset(hdir):
+    with tbx.envset(HOME=hdir.strpath):
         with pytest.raises(FileExistsError) as err:
             pytool.initialize()
     assert hdir.strpath in str(err)
@@ -342,7 +342,7 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
     hdir.ensure(dir=True)
     ptdir = hdir.join(mcat['dot_pt'])
     ptdir.ensure(dir=False)
-    with tbx.envset(hdir):
+    with tbx.envset(HOME=hdir.strpath):
         with pytest.raises(FileExistsError) as err:
             pytool.initialize()
     assert ptdir.strpath in str(err)
