@@ -224,6 +224,19 @@ def test_pytool_ini_envdir_found(tmpdir):
         assert path.strpath == ptini.strpath
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_setup_config_dir(tmpdir, fx_tmpl):
+    """
+    pytool.setup_config_dir() should create cfgdir() if necessary then populate
+    it
+    """
+    ptdir = tmpdir.join("envdir")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        pytool.setup_config_dir()
+    for item in fx_tmpl:
+        assert ptdir.join(item).exists()
+
+
 
 
     assert mcat['isfile'] in str(err)
