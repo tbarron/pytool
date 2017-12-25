@@ -343,3 +343,20 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
     assert mcat['isfile'] in str(err)
 
 
+# -----------------------------------------------------------------------------
+@pytest.fixture
+def fx_tmpl():
+    """
+    Return a list of files and directories expected in the pytool config dir
+    """
+    rval = ["pytool.ini",
+            "templates",
+            "templates/prog.py",
+            "templates/tool.py",
+            "templates/prjdir",
+            "templates/prjdir/setup.py",
+            "templates/prjdir/README.md",
+            "templates/prjdir/prjdir/__init__.py",
+            "templates/prjdir/test/test_stub.py"
+            ]
+    return(rval)
