@@ -237,18 +237,109 @@ def test_pytool_setup_config_dir(tmpdir, fx_tmpl):
         assert ptdir.join(item).exists()
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_envdir_scratch(tmpdir, fx_tmpl):
+    """
+    With PYTOOL_DIR set but the directory not existing, pytool.initialize()
+    should mkdir $PYTOOL_DIR, then write $PYTOOL_DIR/pytool.ini,
+    .../templates/, etc.
+    """
+    ptdir = tmpdir.join("envdir")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        pytool.initialize()
+    assert ptdir.isdir()
+    for item in fx_tmpl:
+        assert ptdir.join(item).exists()
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_envdir_create(tmpdir, fx_tmpl):
+    """
+    With PYTOOL_DIR set and created, pytool.initialize() should create
+    pytool.ini, templates/, etc.
+    """
+    ptdir = tmpdir.join("envdir")
+    ptdir.ensure(dir=True)
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        pytool.initialize()
+    for item in fx_tmpl:
+        assert ptdir.join(item).exists()
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_envdir_isfile(tmpdir):
+    """
+    With PYTOOL_DIR set and pointed at a file, pytool.initialize() should throw
+    an exception indicating that $PYTOOL_DIR is a file, not a directory.
+    """
+    ptdir = tmpdir.join("envdir")
+    ptdir.ensure()
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        with pytest.raises(FileExistsError) as err:
+            pytool.initialize()
+    assert ptdir.strpath in str(err)
     assert mcat['isfile'] in str(err)
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_homedir_scratch(tmpdir):
+    """
+    If HOME is set but the directory does not exist, this implies an
+    incompletely created user. The program should throw FileNotFoundError for
+    $HOME.
+    """
+    hdir = tmpdir.join("home")
+    with tbx.envset(HOME=hdir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            pytool.initialize()
+    assert hdir.strpath in str(err)
     assert mcat['mbdir'] in str(err)
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_homedir_create(tmpdir, fx_tmpl):
+    """
+    With PYTOOL_DIR unset, HOME set and existing, but no .pytool directory in
+    place, pytool.initialize() should create $HOME/.pytool, and write
+    pytool.ini in it along with all the other templates.
+    """
+    hdir = tmpdir.join("home")
+    hdir.ensure(dir=True)
+    ptdir = hdir.join(mcat['dot_pt'])
+    with tbx.envset(HOME=hdir.strpath):
+        pytool.initialize()
+    for item in fx_tmpl:
+        assert ptdir.join(item).exists()
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_homedir_isfile(tmpdir):
+    """
+    If HOME is a file, pytool.initialize() should throw a FileExistsError
+    """
+    hdir = tmpdir.join("home")
+    hdir.ensure(dir=False)
+    with tbx.envset(hdir):
+        with pytest.raises(FileExistsError) as err:
+            pytool.initialize()
+    assert hdir.strpath in str(err)
     assert mcat['isfile'] in str(err)
 
 
+# -----------------------------------------------------------------------------
+def test_pytool_initialize_homedir_pt_isfile(tmpdir):
+    """
+    If HOME/.pytool is a file, pytool.initialize() should throw a
+    FileExistsError
+    """
+    hdir = tmpdir.join("home")
+    hdir.ensure(dir=True)
     ptdir = hdir.join(mcat['dot_pt'])
+    ptdir.ensure(dir=False)
+    with tbx.envset(hdir):
+        with pytest.raises(FileExistsError) as err:
+            pytool.initialize()
+    assert ptdir.strpath in str(err)
     assert mcat['isfile'] in str(err)
 
 
