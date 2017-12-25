@@ -14,6 +14,7 @@ mcat = {'cmd': "command not found",
         'mbdir': "$HOME must be a directory",
         'mbset': "PYTOOL_DIR or HOME must be set",
         'nosuch': "No such file or directory",
+        'notdir': "is not a directory",
         'please': "Please set PYTOOL_DIR or HOME",
         'pthelp': "pytool --help",
         'ptini': "pytool.ini",
@@ -299,7 +300,7 @@ def test_pytool_initialize_homedir_scratch(tmpdir):
         with pytest.raises(FileNotFoundError) as err:
             pytool.initialize()
     assert hdir.strpath in str(err)
-    assert mcat['mbdir'] in str(err)
+    assert mcat['notdir'] in str(err)
 
 
 # -----------------------------------------------------------------------------
