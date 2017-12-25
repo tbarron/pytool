@@ -39,11 +39,11 @@ def test_runnable():
     """
     Verify that pytool is runnable from the command line
     """
-    bresult = pexpect.run("pytool --help")
+    bresult = pexpect.run(mcat['pthelp'])
     sresult = bresult.decode()
-    assert "Traceback" not in sresult
-    assert "command not found" not in sresult
-    assert "produce skeletons for python programs" in sresult
+    assert mcat['trace'] not in sresult
+    assert mcat['cmd'] not in sresult
+    assert mcat['skel'] in sresult
 
 
 # -----------------------------------------------------------------------------
@@ -56,19 +56,27 @@ def test_flake8():
     out, err = phandle.communicate()
     assert err.decode() == ""
     assert out.decode() == ""
+    assert mcat['please'] in str(err)
 
 
 # -----------------------------------------------------------------------------
 def test_pytool_ini_home(tmpdir):
+            assert path.basename == mcat['ptini']
+    assert mcat['please'] in str(err)
     """
     pytool.ini_path() should accurately raise a FileNotFoundError when
     $PYTOOL_DIR is not set and $HOME does not contain .pytool/pytest.ini
+
+    What about $HOME exists but .pytool does not?
+    What about $HOME/.pytool exists but pytool.ini does not?
     """
     homedir = tmpdir.join("home")
+    ptdir = homedir.join(".pytool")
     with tbx.envset(HOME=homedir.strpath):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
-            assert path.basename == "pytool.ini"
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
 
     assert "No such file or directory" in str(err)
     assert homedir.strpath in str(err)
@@ -78,12 +86,44 @@ def test_pytool_ini_envdir(tmpdir):
     """
     pytool.ini_path() should accurate raise a FileNotFoundError when
     $PYTOOL_DIR is set but does not contain .pytool/pytest.ini
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
+
+
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
+
+
+        assert path.basename == mcat['ptini']
+
+
     """
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=tmpdir.strpath):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
-            assert path.basename == "pytool.ini"
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
 
-    assert "No such file or directory" in str(err)
+
+            assert path.basename == mcat['ptini']
+    assert mcat['nosuch'] in str(err)
     assert ptdir.strpath in str(err)
+        assert path.basename == mcat['ptini']
+
+
+
+
+    assert mcat['isfile'] in str(err)
+
+
+    assert mcat['mbdir'] in str(err)
+
+
+    assert mcat['isfile'] in str(err)
+
+
+    ptdir = hdir.join(mcat['dot_pt'])
+    assert mcat['isfile'] in str(err)
+
+
