@@ -223,7 +223,28 @@ def file_tool_py():
     """
     Return content for tool.py
     """
-    pass
+    rval = "".join([x + "\n" for x in [
+        mcat['triquo'],
+        mcat['usage'],
+        mcat['indent'] + mcat['cmdline'],
+        mcat['empty'],
+        mcat['options'],
+        mcat['indent'] + mcat['debug'],
+        mcat['triquo'],
+        mcat['impdd'],
+        mcat['impsys'],
+        mcat['empty'],
+        mcat['defmn'],
+        mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['mcom'],
+        mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['where'],
+        mcat['empty'],
+        mcat['empty'],
+        mcat['ifneqm'],
+        mcat['indent'] + mcat['callmain'],
+        ]])
+    return rval
 
 
 # -----------------------------------------------------------------------------
@@ -231,7 +252,7 @@ def file_init_py():
     """
     Return content for __init__.py
     """
-    pass
+    return file_prog_py()
 
 
 # -----------------------------------------------------------------------------
@@ -239,7 +260,12 @@ def file_readme():
     """
     Return content for README.md
     """
-    pass
+    rval = "".join([x + "\n" for x in [
+        mcat['title'],
+        mcat['empty'],
+        mcat['describe']
+        ]])
+    return rval
 
 
 # -----------------------------------------------------------------------------
@@ -247,7 +273,16 @@ def file_setup_py():
     """
     Return content for setup.py
     """
-    pass
+    rval = "".join([x + "\n" for x in [
+        mcat['impstp'],
+        mcat['empty'],
+        mcat['callstp'],
+        mcat['indent'] + mcat['author'],
+        mcat['indent'] + mcat['authmail'],
+        mcat['indent'] + mcat['entpts'],
+        mcat['indent'] + mcat['closep'],
+        ]])
+    return rval
 
 
 # -----------------------------------------------------------------------------
@@ -255,7 +290,16 @@ def file_test_stub_py():
     """
     Return content for test_stub.py
     """
-    pass
+    rval = "".join([x + "\n" for x in [
+        mcat['imppytst'],
+        mcat['empty'],
+        mcat['deftest'],
+        mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['testdoc'],
+        mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['writst'],
+        ]])
+    return rval
 
 
 # -----------------------------------------------------------------------------
