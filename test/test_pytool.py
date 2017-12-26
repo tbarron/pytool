@@ -1,8 +1,5 @@
-import pexpect
 import py
 import pytest
-import shlex
-import subprocess as proc
 
 import pytool
 from pytool.msgcat import mcat
@@ -15,11 +12,8 @@ def test_flake8():
     """
     Scan payload and test code for lint
     """
-    phandle = proc.Popen(shlex.split(mcat['flake']),
-                         stdout=proc.PIPE, stderr=proc.PIPE)
-    out, err = phandle.communicate()
-    assert err.decode() == ""
-    assert out.decode() == ""
+    result = tbx.run(mcat['flake'])
+    assert "" == result.decode()
 
 
 # -----------------------------------------------------------------------------
@@ -27,7 +21,7 @@ def test_runnable():
     """
     Verify that pytool is runnable from the command line
     """
-    bresult = pexpect.run(mcat['pthelp'])
+    bresult = tbx.run(mcat['pthelp'])
     sresult = bresult.decode()
     assert mcat['trace'] not in sresult
     assert mcat['cmd'] not in sresult
