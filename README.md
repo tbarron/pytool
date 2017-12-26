@@ -19,11 +19,10 @@ author name and e-mail address.
 
 ## Practices
 
-### Non-flakey Code
+### Avoiding Flaky Code
 
 I use the following test to check my code for flakiness:
 
-    # -----------------------------------------------------------------------------
     def test_flake8():
         """
         Scan payload and test code for lint
@@ -64,3 +63,32 @@ debugger will be started for every test.
 
 When the debugger starts up in the fixture, a break point can be set in the
 target test by issuing the command 'b request.function'.
+
+### Test for Deployability
+
+There are several things that should be true if my repository is ready for
+deployment:
+
+ * There should not be any outstanding untracked files. Everything should
+   either be committed or listed in .gitignore.
+ * The version specified in version.py should match the most recent git
+   tag.
+ * The commit indicated by the most recent tag should match HEAD.
+
+These are all things that can be checked in a test.
+
+    def test_deployable():
+        """
+        Check current version against last git tag and check for outstanding
+        untracked files
+        """
+        result = tbx.run("git status --porc")
+        assert "" == result.decode()
+        result = tbx.run("git tag")
+        tagl = result.decode().strip().split("\n")
+        assert version._v == tagl[-1]
+        result = tbx.run("git reflog -1 {}".format(version._v))
+        tagref = result.decode().strip()
+        result = tbx.run("git reflog -1 HEAD")
+        headref = result.decode().split()[0]
+        assert headref == tagref
