@@ -8,3 +8,5 @@
  - pytool.load_config()
  - Ad hoc debugger access when testing from pytest command line
    (conftest.py)
+ - Test for deployability
+ - Implement 'pytool version' and test it
