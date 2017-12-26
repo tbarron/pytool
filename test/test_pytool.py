@@ -1,4 +1,5 @@
 from git import Repo
+import pdb
 import py
 import pytest
 import re
@@ -404,34 +405,36 @@ def test_deployable():
     Check current version against last git tag and check for outstanding
     untracked files
     """
-    # r = Repo('.')
-    # assert [] == r.untracked_files
-    # assert [] == r.index.diff(r.head.commit)
-    # assert [] == r.index.diff(None)
-    result = tbx.run("git status --porc")
-    assert "" == result.decode()
+    r = Repo('.')
+    assert [] == r.untracked_files
+    assert [] == r.index.diff(r.head.commit)
+    assert [] == r.index.diff(None)
+    # result = tbx.run("git status --porc")
+    # assert "" == result.decode()
 
-    # assert version._v == str(r.tags[-1])
-    result = tbx.run("git tag")
-    tagl = result.decode().strip().split("\n")
-    assert version._v == tagl[-1]
+    assert version._v == str(r.tags[-1])
+    # result = tbx.run("git tag")
+    # tagl = result.decode().strip().split("\n")
+    # assert version._v == tagl[-1]
 
-    # assert str(r.head.commit) == str(r.tags[0].commit)
-    result = tbx.run("git reflog -1 {}".format(version._v))
-    tagref = result.decode().strip()
-
-    result = tbx.run("git reflog -1 HEAD")
-    headref = result.decode().split()[0]
-
-    assert headref == tagref
+    assert str(r.head.commit) == str(r.tags[0].commit)
+    # result = tbx.run("git reflog -1 {}".format(version._v))
+    # tagref = result.decode().strip()
+    # 
+    # result = tbx.run("git reflog -1 HEAD")
+    # headref = result.decode().split()[0]
+    # 
+    # assert headref == tagref
 
 
 # -----------------------------------------------------------------------------
 @pytest.fixture(autouse=True)
-def fx_debug(request):
+def fx_debug(request, capsys):
     """
+    No, this needs to check a flag and if debugging is on for this test, THEN
+    we disable capsys and yield. Otherwise, we just run the test as usual.
     """
-    print("'b request.function' to stop in the target test")
+    # print("'b request.function' to stop in the target test")
     pytest.dbgfunc()
 
 
