@@ -1,5 +1,6 @@
 import py
 import pytest
+import re
 
 import pytool
 from pytool.msgcat import mcat
@@ -358,6 +359,16 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
             pytool.initialize()
     assert ptdir.strpath in str(err)
     assert mcat['isfile'] in str(err)
+
+
+# -----------------------------------------------------------------------------
+def test_version():
+    """
+    Test 'pytool version'
+    """
+    result = tbx.run("pytool version")
+    assert mcat['trace'] not in result.decode()
+    assert re.findall("pytool version \d+\.\d+\.\d+", result.decode())
 
 
 # -----------------------------------------------------------------------------
