@@ -41,6 +41,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
+import configparser
 import os
 import py
 import pdb
@@ -123,11 +124,18 @@ def initialize():
 
 
 # -----------------------------------------------------------------------------
-def load_config(ptini):
+def load_config():
     """
     Load the config info from cfgdir()/pytool.ini
     """
-    pass
+    cdir, _ = cfgdir()
+    ptpath = py.path.local(os.path.join(cdir, mcat['ptini']))
+    if ptpath.exists():
+        rval = configparser.ConfigParser()
+        rval.read(ptpath.strpath)
+        return(rval)
+    else:
+        raise FileNotFoundError(ptpath.strpath)
 
 
 # -----------------------------------------------------------------------------
