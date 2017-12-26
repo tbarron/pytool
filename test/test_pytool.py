@@ -337,6 +337,32 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
 
 
 # -----------------------------------------------------------------------------
+@pytest.mark.parametrize("func, snips", [
+    (pytool.file_pytool_ini, ['tmpl', 'udir', ]),
+    (pytool.file_prog_py,  ['impsys', 'defmn', 'triquo', 'where',
+                            'ifneqm', 'callmain']),
+    (pytool.file_tool_py,  ['usage', 'cmdline', 'triquo', 'options', 'debug',
+                            'impdd', 'impsys', 'defmn', 'where']),
+    (pytool.file_init_py,  ['impsys', 'defmn', 'triquo', 'where',
+                            'ifneqm', 'callmain']),
+    (pytool.file_readme,   ['title',
+                            'describe', ]),
+    (pytool.file_setup_py, ['impstp', 'callstp', 'author', 'authmail',
+                            'entpts', 'closep']),
+    (pytool.file_test_stub_py, ['imppytst', 'deftest', 'triquo', 'testdoc',
+                                'writst'])
+    ])
+def test_content(func, snips):
+    """
+    Check the content produced by file_readme()
+    """
+    content = func()
+    assert type(content) == str
+    for item in snips:
+        assert mcat[item] in content
+
+
+# -----------------------------------------------------------------------------
 @pytest.fixture
 def fx_tmpl():
     """
