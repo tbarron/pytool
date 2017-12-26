@@ -1,0 +1,10 @@
+0.0.1
+ - Started the project
+ - setup.py, pytool/__init__.py, runnability, first test
+ - flake8 test
+ - Put strings in message catalog
+ - Tests to verify templates setup, creation of pytool.ini, content of
+   various template files, etc.
+ - pytool.load_config()
+ - Ad hoc debugger access when testing from pytest command line
+   (conftest.py)
