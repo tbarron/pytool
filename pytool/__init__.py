@@ -44,6 +44,7 @@ GNU General Public License for more details.
 import os
 import py
 import sys
+from pytool.msgcat import mcat
 
 
 # -----------------------------------------------------------------------------
@@ -68,16 +69,16 @@ def cfgdir():
     PYTOOL_DIR or 'home' if the config dir path was taken from env var HOME +
     '.pytool'
     """
-    trydir = os.getenv("PYTOOL_DIR")
+    trydir = os.getenv(mcat['ptdir'])
     if trydir:
-        return(trydir, "env")
+        return(trydir, mcat['env'])
 
-    homedir = os.getenv("HOME")
+    homedir = os.getenv(mcat['uchome'])
     if homedir:
-        ptdir = os.path.join(homedir, ".pytool")
-        return(ptdir, "home")
+        ptdir = os.path.join(homedir, mcat['dot_pt'])
+        return(ptdir, mcat['lchome'])
 
-    raise FileNotFoundError("Please set PYTOOL_DIR or HOME")
+    raise FileNotFoundError(mcat['please'])
 
 
 # -----------------------------------------------------------------------------
@@ -88,12 +89,11 @@ def ini_path():
     FileNotFoundError.
     """
     (cdir, _) = cfgdir()
-    fpath = py.path.local(os.path.join(cdir, "pytool.ini"))
+    fpath = py.path.local(os.path.join(cdir, mcat['ptini']))
     if fpath.exists():
         return fpath.strpath
     else:
-        msg = "No such file or directory: '{}'".format(fpath)
-        raise FileNotFoundError(msg)
+        raise FileNotFoundError("{}: '{}'".format(mcat['nosuch'], fpath))
 
 
 # -----------------------------------------------------------------------------
@@ -127,14 +127,13 @@ def setup_config_dir():
     cdir, src = cfgdir()
     cdir = py.path.local(cdir)
     hdir = py.path.local(cdir.dirname)
-    if src == "home" and not hdir.exists():
-        raise FileNotFoundError("{} {}".format(hdir.strpath,
-                                               "is not a directory"))
+    if src == mcat['lchome'] and not hdir.exists():
+        raise FileNotFoundError("{} {}".format(hdir.strpath, mcat['notdir']))
 
     try:
         cdir.ensure(dir=True)
     except py.error.EEXIST:
-        msg = "{} is a file, cannot mkdir".format(cdir.strpath)
+        msg = "{} {}".format(cdir.strpath, mcat['isfile'])
         raise FileExistsError(msg)
 
     ptini = cdir.join("pytool.ini")
