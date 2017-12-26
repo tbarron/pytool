@@ -147,11 +147,8 @@ def setup_config_dir():
         msg = "{} {}".format(cdir.strpath, mcat['isfile'])
         raise FileExistsError(msg)
 
-    ptini = cdir.join("pytool.ini")
-    ptini.write([x + "\n"
-                 for x in ["[pytool]",
-                           "templates_dir = {}/{}".format(cdir.strpath,
-                                                          "templates")]])
+    ptini = cdir.join(mcat['ptini'])
+    ptini.write(file_pytool_ini())
 
     tmpl = cdir.join("templates")  # .../templates
     tmpl.ensure(dir=True)
@@ -185,11 +182,40 @@ def setup_config_dir():
 
 
 # -----------------------------------------------------------------------------
+def file_pytool_ini():
+    """
+    Return content for pytool.ini
+    """
+    cdir, _ = cfgdir()
+    rval = "".join([x + mcat['newline'] for x in [
+        mcat['sqpt'],
+        "{}{} = {}/{}".format(mcat['tmpl'],
+                              mcat['udir'],
+                              cdir,
+                              mcat['tmpl'])
+        ]])
+    return rval
+
+
+# -----------------------------------------------------------------------------
 def file_prog_py():
     """
     Return content for prog.py
     """
-    pass
+    rval = "".join([x + mcat['newline'] for x in [
+        mcat['impsys'],
+        mcat['empty'],
+        mcat['defmn'],
+        mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['mcom'],
+        mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['where'],
+        mcat['empty'],
+        mcat['empty'],
+        mcat['ifneqm'],
+        mcat['indent'] + mcat['callmain'],
+        ]])
+    return rval
 
 
 # -----------------------------------------------------------------------------
