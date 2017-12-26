@@ -218,6 +218,35 @@ def test_pytool_ini_envdir_found(tmpdir):
 
 
 # -----------------------------------------------------------------------------
+def test_pytool_load_cfg_nosuch(tmpdir):
+    """
+    Attempting to load config from no such file should get FileNotFoundError
+    """
+    wdir = tmpdir.join("pytool")
+    ptini = wdir.join("pytool.ini")
+    with tbx.envset(PYTOOL_DIR=wdir.strpath):
+        with pytest.raises(FileNotFoundError) as err:
+            cfg = pytool.load_config()
+            assert cfg is not None
+    assert ptini.strpath in str(err)
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_load_cfg_exist(tmpdir):
+    """
+    Attempting to load config from a real file should work
+    """
+    wdir = tmpdir.join(mcat['pytool'])
+    tdir = wdir.join(mcat['tmpl'])
+    with tbx.envset(PYTOOL_DIR=wdir.strpath):
+        pytool.setup_config_dir()
+        cfg = pytool.load_config()
+        assert mcat['pytool'] in cfg.sections()
+        assert mcat['tmpldir'] in cfg.options(mcat['pytool'])
+        assert cfg.get('pytool', 'templates_dir') == tdir.strpath
+
+
+# -----------------------------------------------------------------------------
 def test_pytool_setup_config_dir(tmpdir, fx_tmpl):
     """
     pytool.setup_config_dir() should create cfgdir() if necessary then populate
