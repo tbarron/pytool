@@ -410,6 +410,14 @@ def test_deployable():
     tagl = result.decode().strip().split("\n")
     assert version._v == tagl[-1]
 
+    result = tbx.run("git reflog -1 {}".format(version._v))
+    tagref = result.decode()
+
+    result = tbx.run("git reflog -1 HEAD")
+    headref = result.decode().split()[0]
+
+    assert headref == tagref
+
 
 # -----------------------------------------------------------------------------
 @pytest.fixture(autouse=True)
