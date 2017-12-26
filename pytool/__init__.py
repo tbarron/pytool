@@ -1,3 +1,46 @@
+"""
+pytool - produce skeletons for python programs
+
+Usage:
+    pytool help [COMMAND]
+    pytool project [-d] PATH
+    pytool program [-d] PATH
+    pytool tool [-d] PATH
+
+---
+pytool examples:
+
+    pytool help
+        Display this list of command descriptions
+
+    pytool project PATH
+        Create a python project in PATH
+
+    pytool program PATH
+        Create a python program in PATH
+
+    pytool tool PATH
+        Create a new tool-style python program in PATH
+---
+
+Copyright (C) 1995 - <the end of time> Tom Barron
+  tom.barron@comcast.net
+  177 Crossroads Blvd
+  Oak Ridge, TN  37830
+
+This software is licensed under the CC-GNU GPL. For the full text of
+the license, see http://creativecommons.org/licenses/GPL/2.0/
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+"""
 import os
 import py
 import sys
