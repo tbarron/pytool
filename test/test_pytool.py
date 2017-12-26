@@ -411,7 +411,7 @@ def test_deployable():
     assert version._v == tagl[-1]
 
     result = tbx.run("git reflog -1 {}".format(version._v))
-    tagref = result.decode()
+    tagref = result.decode().strip()
 
     result = tbx.run("git reflog -1 HEAD")
     headref = result.decode().split()[0]
