@@ -40,3 +40,27 @@ pytest discovers), I get quick feedback on my code quality. If any flakes
 creep into the code, my test suite lets me know.
 
 
+### Debug access during testing
+
+Often it's helpful to be able to break into the debugger while running
+tests. See conftest.py in the test directory for how this is set up.
+
+In the main test file (test_pytool.py), I have an autouse fixture that
+actually uses the hook set up in conftest.py:
+
+    @pytest.fixture(autouse=True)
+    def fx_debug(request):
+        """
+        Call the debug function set up in conftest.py
+        """
+        print("'b request.function' to stop in the target test")
+        pytest.dbgfunc()
+
+With this in place, putting '--dbg <testname>' on the py.test command line
+will fire up the debugger when we hit the fixture for the specified test.
+The argument to --dbg can be a partial test name and all matched tests will
+get a debugger invocation. Or the argument to --dbg can be 'all' and the
+debugger will be started for every test.
+
+When the debugger starts up in the fixture, a break point can be set in the
+target test by issuing the command 'b request.function'.
