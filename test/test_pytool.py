@@ -407,7 +407,7 @@ def test_deployable():
     assert "" == result.decode()
 
     result = tbx.run("git tag")
-    tagl = result.decode().split("\n")
+    tagl = result.decode().strip().split("\n")
     assert version._v == tagl[-1]
 
 
