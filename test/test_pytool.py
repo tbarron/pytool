@@ -5,22 +5,8 @@ import shlex
 import subprocess as proc
 
 import pytool
+from pytool.msgcat import mcat
 import tbx
-
-mcat = {'cmd': "command not found",
-        'dot_pt': ".pytool",
-        'flake': "flake8 pytool test",
-        'isfile': "is a file, cannot mkdir",
-        'mbdir': "$HOME must be a directory",
-        'mbset': "PYTOOL_DIR or HOME must be set",
-        'nosuch': "No such file or directory",
-        'notdir': "is not a directory",
-        'please': "Please set PYTOOL_DIR or HOME",
-        'pthelp': "pytool --help",
-        'ptini': "pytool.ini",
-        'skel': "produce skeletons for python programs",
-        'trace': "Traceback",
-        }
 
 
 # -----------------------------------------------------------------------------
