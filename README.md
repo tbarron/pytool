@@ -16,3 +16,27 @@ before running pytool).
 
 Make sure to edit $HOME/.pytool/templates/prjdir/setup.py to set your
 author name and e-mail address.
+
+## Practices
+
+### Non-flakey Code
+
+I use the following test to check my code for flakiness:
+
+        # -----------------------------------------------------------------------------
+        def test_flake8():
+            """
+            Scan payload and test code for lint
+            """
+            pytest.dbgfunc()
+            phandle = proc.Popen(shlex.split(mcat['flake']),
+                                 stdout=proc.PIPE, stderr=proc.PIPE)
+            out, err = phandle.communicate()
+            assert err.decode() == ""
+            assert out.decode() == ""
+
+By running this test first (i.e., it's positioned so it's the first thing
+pytest discovers), I get quick feedback on my code quality. If any flakes
+creep into the code, my test suite lets me know.
+
+
