@@ -43,8 +43,9 @@ GNU General Public License for more details.
 """
 import os
 import py
-import sys
+import pdb
 from pytool.msgcat import mcat
+from docopt_dispatch import dispatch
 
 
 # -----------------------------------------------------------------------------
@@ -52,8 +53,18 @@ def main():
     """
     Main entrypoint
     """
-    print(sys.argv)
-    print("produce skeletons for python programs")
+    dispatch(__doc__)
+
+
+# -----------------------------------------------------------------------------
+@dispatch.on('tool')
+def make_tool(**kwa):
+    """
+    Create a tool
+    """
+    if kwa['d']:
+        pdb.set_trace()
+    print(kwa)
 
 
 # -----------------------------------------------------------------------------
