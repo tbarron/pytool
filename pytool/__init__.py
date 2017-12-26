@@ -124,12 +124,16 @@ def initialize():
 
 
 # -----------------------------------------------------------------------------
-def load_config():
+def load_config(ptini=None):
     """
     Load the config info from cfgdir()/pytool.ini
     """
-    cdir, _ = cfgdir()
-    ptpath = py.path.local(os.path.join(cdir, mcat['ptini']))
+    if ptini is None:
+        cdir, _ = cfgdir()
+        ptpath = py.path.local(os.path.join(cdir, mcat['ptini']))
+    else:
+        ptpath = py.path.local(ptini)
+
     if ptpath.exists():
         rval = configparser.ConfigParser()
         rval.read(ptpath.strpath)
