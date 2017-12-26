@@ -6,6 +6,7 @@ import subprocess as proc
 
 import pytool
 from pytool.msgcat import mcat
+from pytool import version
 import tbx
 
 
@@ -417,6 +418,20 @@ def test_content(func, snips):
 
 
 # -----------------------------------------------------------------------------
+def test_deployable():
+    """
+    Check current version against last git tag and check for outstanding
+    untracked files
+    """
+    pytest.dbgfunc()
+    result = tbx.run("git status --porc")
+    assert "" == result.decode()
+
+    result = tbx.run("git tag")
+    tagl = result.decode().split("\n")
+    assert version._v == tagl[-1]
+
+
 @pytest.fixture
 def fx_tmpl():
     """
