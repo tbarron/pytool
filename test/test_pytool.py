@@ -1,3 +1,4 @@
+from git import Repo
 import py
 import pytest
 import re
@@ -403,13 +404,19 @@ def test_deployable():
     Check current version against last git tag and check for outstanding
     untracked files
     """
+    # r = Repo('.')
+    # assert [] == r.untracked_files
+    # assert [] == r.index.diff(r.head.commit)
+    # assert [] == r.index.diff(None)
     result = tbx.run("git status --porc")
     assert "" == result.decode()
 
+    # assert version._v == str(r.tags[-1])
     result = tbx.run("git tag")
     tagl = result.decode().strip().split("\n")
     assert version._v == tagl[-1]
 
+    # assert str(r.head.commit) == str(r.tags[0].commit)
     result = tbx.run("git reflog -1 {}".format(version._v))
     tagref = result.decode().strip()
 
