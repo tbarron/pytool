@@ -6,6 +6,7 @@ Usage:
     pytool project [-d] PATH
     pytool program [-d] PATH
     pytool tool [-d] PATH
+    pytool version [-d]
 
 ---
 pytool examples:
@@ -42,11 +43,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 import configparser
+from docopt_dispatch import dispatch
 import os
 import py
 import pdb
 from pytool.msgcat import mcat
-from docopt_dispatch import dispatch
+from pytool import version
 
 
 # -----------------------------------------------------------------------------
@@ -66,6 +68,17 @@ def make_tool(**kwa):
     if kwa['d']:
         pdb.set_trace()
     print(kwa)
+
+
+# -----------------------------------------------------------------------------
+@dispatch.on('version')
+def show_version(**kwa):
+    """
+    Report the current version
+    """
+    if kwa['d']:
+        pdb.set_trace()
+    print("pytool version {}".format(version._v))
 
 
 # -----------------------------------------------------------------------------
