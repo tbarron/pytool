@@ -15,7 +15,6 @@ def test_flake8():
     """
     Scan payload and test code for lint
     """
-    pytest.dbgfunc()
     phandle = proc.Popen(shlex.split(mcat['flake']),
                          stdout=proc.PIPE, stderr=proc.PIPE)
     out, err = phandle.communicate()
@@ -28,7 +27,6 @@ def test_runnable():
     """
     Verify that pytool is runnable from the command line
     """
-    pytest.dbgfunc()
     bresult = pexpect.run(mcat['pthelp'])
     sresult = bresult.decode()
     assert mcat['trace'] not in sresult
@@ -42,7 +40,6 @@ def test_pytool_cfgdir_neither():
     pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
     set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
     """
-    pytest.dbgfunc()
     with tbx.envset(PYTOOL_DIR=None, HOME=None):
         with pytest.raises(FileNotFoundError) as err:
             pytool.cfgdir()
@@ -55,7 +52,6 @@ def test_pytool_cfgdir_justpt_nosuch(tmpdir):
     pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
     set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath, HOME=None):
         cdir, src = pytool.cfgdir()
@@ -69,7 +65,6 @@ def test_pytool_cfgdir_justhome_nosuch(tmpdir):
     pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
     set, else throw tbx.Error('PYTOOL_DIR or HOME must be set')
     """
-    pytest.dbgfunc()
     hdir = tmpdir.join("homedir")
     ptdir = hdir.join(".pytool")
     with tbx.envset(PYTOOL_DIR=None, HOME=hdir.strpath):
@@ -86,7 +81,6 @@ def test_pytool_cfgdir_both(tmpdir):
 
     With both PYTOOL_DIR and HOME set, cfgdir should return PYTOOL_DIR
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     hdir = tmpdir.join("homedir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath, HOME=hdir.strpath):
@@ -101,7 +95,6 @@ def test_pytool_ini_unset(tmpdir):
     Neither PYTOOL_DIR nor HOME is set. Should get 'Please set PYTOOL_DIR or
     HOME', thrown by cfgdir()
     """
-    pytest.dbgfunc()
     with tbx.envset(HOME=None, PYTOOL_DIR=None):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
@@ -118,7 +111,6 @@ def test_pytool_ini_home_nodir(tmpdir):
     What about $HOME exists but .pytool does not?
     What about $HOME/.pytool exists but pytool.ini does not?
     """
-    pytest.dbgfunc()
     homedir = tmpdir.join("home")
     ptdir = homedir.join(".pytool")
     with tbx.envset(HOME=homedir.strpath):
@@ -135,7 +127,6 @@ def test_pytool_ini_home_no_pt(tmpdir):
     $HOME exists but subdir .pytool does not. ini_path should raise
     FileNotFoundError
     """
-    pytest.dbgfunc()
     homedir = tmpdir.join("home")
     homedir.ensure(dir=True)
     ptdir = homedir.join(".pytool")
@@ -152,7 +143,6 @@ def test_pytool_ini_home_noini(tmpdir):
     """
     $HOME exists, subdir .pytool exists, pytool.ini not present
     """
-    pytest.dbgfunc()
     homedir = tmpdir.join("home")
     ptdir = homedir.join(".pytool")
     ptdir.ensure(dir=True)
@@ -170,7 +160,6 @@ def test_pytool_ini_home_found(tmpdir):
     $HOME exists, subdir .pytool exists, pytool.ini is present, should return
     path for pytool.ini
     """
-    pytest.dbgfunc()
     homedir = tmpdir.join("home")
     ptdir = homedir.join(".pytool")
     ptfile = ptdir.join("pytool.ini")
@@ -187,7 +176,6 @@ def test_pytool_ini_envdir_nodir(tmpdir):
     pytool.ini_path() should accurately raise a FileNotFoundError when
     $PYTOOL_DIR is set but does not contain pytest.ini
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
         with pytest.raises(FileNotFoundError) as err:
@@ -205,7 +193,6 @@ def test_pytool_ini_envdir_nofile(tmpdir):
 
     What about $PYTOOL_DIR exists but pytool.ini does not?
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     ptdir.ensure(dir=True)
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
@@ -222,7 +209,6 @@ def test_pytool_ini_envdir_found(tmpdir):
     pytool.ini_path() should return the path of pytool.ini in directory
     $PYTOOL_DIR if it's there.
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     ptini = ptdir.join("pytool.ini")
     ptini.ensure(dir=False)
@@ -237,7 +223,6 @@ def test_pytool_load_cfg_nosuch(tmpdir):
     """
     Attempting to load config from no such file should get FileNotFoundError
     """
-    pytest.dbgfunc()
     wdir = tmpdir.join("pytool")
     ptini = wdir.join("pytool.ini")
     with tbx.envset(PYTOOL_DIR=wdir.strpath):
@@ -252,7 +237,6 @@ def test_pytool_load_cfg_exist(tmpdir):
     """
     Attempting to load config from a real file should work
     """
-    pytest.dbgfunc()
     wdir = tmpdir.join(mcat['pytool'])
     tdir = wdir.join(mcat['tmpl'])
     with tbx.envset(PYTOOL_DIR=wdir.strpath):
@@ -269,7 +253,6 @@ def test_pytool_setup_config_dir(tmpdir, fx_tmpl):
     pytool.setup_config_dir() should create cfgdir() if necessary then populate
     it
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
         pytool.setup_config_dir()
@@ -284,7 +267,6 @@ def test_pytool_initialize_envdir_scratch(tmpdir, fx_tmpl):
     should mkdir $PYTOOL_DIR, then write $PYTOOL_DIR/pytool.ini,
     .../templates/, etc.
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
         pytool.initialize()
@@ -299,7 +281,6 @@ def test_pytool_initialize_envdir_create(tmpdir, fx_tmpl):
     With PYTOOL_DIR set and created, pytool.initialize() should create
     pytool.ini, templates/, etc.
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     ptdir.ensure(dir=True)
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
@@ -314,7 +295,6 @@ def test_pytool_initialize_envdir_isfile(tmpdir):
     With PYTOOL_DIR set and pointed at a file, pytool.initialize() should throw
     an exception indicating that $PYTOOL_DIR is a file, not a directory.
     """
-    pytest.dbgfunc()
     ptdir = tmpdir.join("envdir")
     ptdir.ensure()
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
@@ -331,7 +311,6 @@ def test_pytool_initialize_homedir_scratch(tmpdir):
     incompletely created user. The program should throw FileNotFoundError for
     $HOME.
     """
-    pytest.dbgfunc()
     hdir = tmpdir.join("home")
     with tbx.envset(HOME=hdir.strpath):
         with pytest.raises(FileNotFoundError) as err:
@@ -347,7 +326,6 @@ def test_pytool_initialize_homedir_create(tmpdir, fx_tmpl):
     place, pytool.initialize() should create $HOME/.pytool, and write
     pytool.ini in it along with all the other templates.
     """
-    pytest.dbgfunc()
     hdir = tmpdir.join("home")
     hdir.ensure(dir=True)
     ptdir = hdir.join(mcat['dot_pt'])
@@ -362,7 +340,6 @@ def test_pytool_initialize_homedir_isfile(tmpdir):
     """
     If HOME is a file, pytool.initialize() should throw a FileExistsError
     """
-    pytest.dbgfunc()
     hdir = tmpdir.join("home")
     hdir.ensure(dir=False)
     with tbx.envset(HOME=hdir.strpath):
@@ -378,7 +355,6 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
     If HOME/.pytool is a file, pytool.initialize() should throw a
     FileExistsError
     """
-    pytest.dbgfunc()
     hdir = tmpdir.join("home")
     hdir.ensure(dir=True)
     ptdir = hdir.join(mcat['dot_pt'])
@@ -410,7 +386,6 @@ def test_content(func, snips):
     """
     Check the content produced by file_readme()
     """
-    pytest.dbgfunc()
     content = func()
     assert type(content) == str
     for item in snips:
@@ -423,7 +398,6 @@ def test_deployable():
     Check current version against last git tag and check for outstanding
     untracked files
     """
-    pytest.dbgfunc()
     result = tbx.run("git status --porc")
     assert "" == result.decode()
 
@@ -432,6 +406,16 @@ def test_deployable():
     assert version._v == tagl[-1]
 
 
+# -----------------------------------------------------------------------------
+@pytest.fixture(autouse=True)
+def fx_debug(request):
+    """
+    """
+    print("'b request.function' to stop in the target test")
+    pytest.dbgfunc()
+
+
+# -----------------------------------------------------------------------------
 @pytest.fixture
 def fx_tmpl():
     """
