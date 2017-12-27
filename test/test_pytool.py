@@ -416,7 +416,7 @@ def test_deployable():
 
 # -----------------------------------------------------------------------------
 @pytest.fixture(autouse=True)
-def fx_debug(request, capsys):
+def fx_debug(request):
     """
     No, this needs to check a flag and if debugging is on for this test, THEN
     we disable capsys and yield. Otherwise, we just run the test as usual.
