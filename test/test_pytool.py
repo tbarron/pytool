@@ -369,13 +369,18 @@ def test_pytool_prog(tmpdir):
     """
     progname = tmpdir.join("pytool_test.py")
     tbx.run("pytool program {}".format(progname))
-    result = progname.read()
-    assert mcat['divider'] in result
-    assert mcat['defmn'] in result
-    assert mcat['prargs'] in result
-    assert mcat['where'] in result
-    assert mcat['ifneqm'] in result
-    assert mcat['callmain'] in result
+    res_s = progname.read()
+    assert mcat['triquo'] in res_s
+    assert mcat['descp'] in res_s
+    assert mcat['triquo'] in res_s
+    assert mcat['impsys'] in res_s
+    assert mcat['divider'] in res_s
+    assert mcat['defmn'] in res_s
+    assert mcat['prargs'] in res_s
+    assert mcat['where'] in res_s
+    assert mcat['divider'] in res_s
+    assert mcat['ifneqm'] in res_s
+    assert mcat['callmain'] in res_s
     result = tbx.run("flake8 {}".format(progname))
     assert "" == result.decode()
 
