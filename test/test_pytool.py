@@ -411,7 +411,7 @@ def test_deployable():
 
     assert version._v == str(r.tags[-1]), "Version does not match tag"
 
-    assert str(r.head.commit) == str(r.tags[0].commit), "Tag != HEAD"
+    assert str(r.head.commit) == str(r.tags[-1].commit), "Tag != HEAD"
 
 
 # -----------------------------------------------------------------------------
