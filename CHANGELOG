@@ -1,3 +1,6 @@
+0.0.4
+ - Add test and code for 'pytool program <path>'
+
 0.0.3
  - Squared away --dbg option for now but you have to specify -s along with
    it :(
