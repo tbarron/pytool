@@ -10,18 +10,8 @@ def pytest_addoption(parser):
     """
     Adding pytest command line options
     """
-    # pdb.set_trace()
     parser.addoption("--dbg", action='append', default=[],
                      help="start debugger on named test or all")
-
-
-# -----------------------------------------------------------------------------
-# def pytest_configure(config):
-#     """
-#     If --dbg, set -s
-#     """
-#     # if config.getvalue('dbg'):
-#     #     config.option.capture = 'no'
 
 
 # -----------------------------------------------------------------------------
