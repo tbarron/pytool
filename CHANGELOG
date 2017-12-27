@@ -1,3 +1,7 @@
+0.0.2
+ - Messing around with --dbg option
+ - Switch to GitPython api rather than calling git externally
+
 0.0.1
  - Started the project
  - setup.py, pytool/__init__.py, runnability, first test
