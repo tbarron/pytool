@@ -60,6 +60,16 @@ def main():
 
 
 # -----------------------------------------------------------------------------
+@dispatch.on('program')
+def make_program(**kwa):
+    """
+    Create a program file
+    """
+    output = py.path.local(kwa['PATH'])
+    output.write(file_prog_py())
+
+
+# -----------------------------------------------------------------------------
 @dispatch.on('tool')
 def make_tool(**kwa):
     """
@@ -228,15 +238,22 @@ def file_prog_py():
     Return content for prog.py
     """
     rval = "".join([x + mcat['newline'] for x in [
+        mcat['triquo'],
+        mcat['descp'],
+        mcat['triquo'],
         mcat['impsys'],
         mcat['empty'],
+        mcat['empty'],
+        mcat['divider'],
         mcat['defmn'],
         mcat['indent'] + mcat['triquo'],
         mcat['indent'] + mcat['mcom'],
         mcat['indent'] + mcat['triquo'],
+        mcat['indent'] + mcat['prargs'],
         mcat['indent'] + mcat['where'],
         mcat['empty'],
         mcat['empty'],
+        mcat['divider'],
         mcat['ifneqm'],
         mcat['indent'] + mcat['callmain'],
         ]])
