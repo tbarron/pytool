@@ -8,6 +8,7 @@ mcat = {'author':   "author=\"Your Name\",",
         'debug':    "-d      use the debugger",
         'defmn':    "def main():",
         'deftest':  "def test_function():",
+        'descp':    "Describe your program here",
         'describe': "Describe your project here",
         'divider':  ("# ---------------------------------------------"
                      "--------------------------------"),
