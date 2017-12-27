@@ -363,6 +363,24 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
 
 
 # -----------------------------------------------------------------------------
+def test_pytool_prog(tmpdir):
+    """
+    Test 'pytool program PATH'
+    """
+    progname = tmpdir.join("pytool_test.py")
+    tbx.run("pytool program {}".format(progname))
+    result = progname.read()
+    assert mcat['divider'] in result
+    assert mcat['defmn'] in result
+    assert mcat['prargs'] in result
+    assert mcat['where'] in result
+    assert mcat['ifneqm'] in result
+    assert mcat['callmain'] in result
+    result = tbx.run("flake8 {}".format(progname))
+    assert "" == result.decode()
+
+
+# -----------------------------------------------------------------------------
 def test_version():
     """
     Test 'pytool version'
