@@ -1,3 +1,7 @@
+0.0.3
+ - Squared away --dbg option for now but you have to specify -s along with
+   it :(
+
 0.0.2
  - Messing around with --dbg option
  - Switch to GitPython api rather than calling git externally
