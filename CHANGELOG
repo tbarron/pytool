@@ -1,3 +1,8 @@
+0.0.5
+ - Correct test and code for 'pytool program <path>'
+ - Write test and code for 'pytool tool <path>'
+ - Update README.md to document pytool usage
+
 0.0.4
  - Add test and code for 'pytool program <path>'
 
