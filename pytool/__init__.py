@@ -65,8 +65,9 @@ def make_program(**kwa):
     """
     Create a program file
     """
-    output = py.path.local(kwa['PATH'])
-    output.write(file_prog_py())
+    if kwa['d']:
+        pdb.set_trace()
+    create_prog_tool(mcat['prog_py'], kwa['PATH'])
 
 
 # -----------------------------------------------------------------------------
@@ -77,7 +78,19 @@ def make_tool(**kwa):
     """
     if kwa['d']:
         pdb.set_trace()
-    print(kwa)
+    create_prog_tool(mcat['tool_py'], kwa['PATH'])
+
+
+# -----------------------------------------------------------------------------
+def create_prog_tool(src, trg):
+    """
+    Create a program or tool
+    """
+    cfg = initialize()
+    tmpldir = py.path.local(cfg.get(mcat['pytool'], 'templates_dir'))
+    pysrc = tmpldir.join(src)
+    pytrg = py.path.local(trg)
+    pysrc.copy(pytrg)
 
 
 # -----------------------------------------------------------------------------
@@ -197,10 +210,10 @@ def setup_config_dir():
     tdir = pdir.join("test")      # .../templates/prjdir/test
     tdir.ensure(dir=True)
 
-    prog = tmpl.join("prog.py")   # .../templates/prog.py
+    prog = tmpl.join(mcat["prog_py"])   # .../templates/prog.py
     prog.write(file_prog_py())
 
-    tool = tmpl.join("tool.py")   # .../templates/tool.py
+    tool = tmpl.join(mcat["tool_py"])   # .../templates/tool.py
     tool.write(file_tool_py())
 
     init = ppdir.join("__init__.py")  # .../templates/prjdir/prjdir/__init__.py
