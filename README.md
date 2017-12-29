@@ -17,6 +17,63 @@ before running pytool).
 Make sure to edit $HOME/.pytool/templates/prjdir/setup.py to set your
 author name and e-mail address.
 
+## Usage
+
+### Stand-alone Program
+
+    pytool program PATH
+
+The following code is written into the file at PATH:
+
+    """
+    Describe your program here
+    """
+    import sys
+
+
+    # -----------------------------------------------------------------------------
+    def main():
+        """
+        main entrypoint
+        """
+        print(sys.argv)
+        print("This is where your code goes")
+
+
+    # -----------------------------------------------------------------------------
+    if __name__ == "__main__":
+        main()
+
+### Tool-style Program (using docopt-dispatch)
+
+    pytool tool PATH
+
+The following code is written into the file at PATH:
+
+
+### Full Python Layout Project
+
+    pytool progject PATH
+
+The following files are written into the directory at PATH:
+
+    PATH
+     |
+     +- setup.py
+     |
+     +- README.py
+     |
+     +- pytest.ini
+     |
+     +- PATH
+     |   |
+     |   +- __init__.py
+     |
+     +- test
+         |
+         +- test_stub.py
+
+
 ## Practices
 
 ### Avoiding Flaky Code
