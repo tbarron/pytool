@@ -367,22 +367,59 @@ def test_pytool_prog(tmpdir):
     """
     Test 'pytool program PATH'
     """
-    progname = tmpdir.join("pytool_test.py")
-    tbx.run("pytool program {}".format(progname))
-    res_s = progname.read()
-    assert mcat['triquo'] in res_s
-    assert mcat['descp'] in res_s
-    assert mcat['triquo'] in res_s
-    assert mcat['impsys'] in res_s
-    assert mcat['divider'] in res_s
-    assert mcat['defmn'] in res_s
-    assert mcat['prargs'] in res_s
-    assert mcat['where'] in res_s
-    assert mcat['divider'] in res_s
-    assert mcat['ifneqm'] in res_s
-    assert mcat['callmain'] in res_s
-    result = tbx.run("flake8 {}".format(progname))
-    assert "" == result.decode()
+    ptdir = tmpdir.join(".pytool")
+    src = ptdir.join("templates/prog.py")
+    trg = tmpdir.join("example.py")
+    trg2 = tmpdir.join("example2.py")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        kwa = {'d': False,
+               'program': True,
+               'PATH': trg.strpath}
+        pytool.make_program(**kwa)
+        assert src.read() == trg.read()
+
+        lines = src.readlines()
+        lines.append("# This is an extra comment at the end.\n")
+        lines.append("# And another.\n")
+        src.write("".join(lines))
+
+        assert src.read() != trg.read()
+        kwa = {'d': False,
+               'program': True,
+               'PATH': trg2.strpath}
+        pytool.make_program(**kwa)
+        assert src.read() == trg2.read()
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_tool(tmpdir):
+    """
+    Test 'pytool tool PATH'
+    """
+    ptdir = tmpdir.join(".pytool")
+    src = ptdir.join("templates/tool.py")
+    trg = tmpdir.join("example.py")
+    trg2 = tmpdir.join("example2.py")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        kwa = {'d': False,
+               'program': False,
+               'tool': True,
+               'PATH': trg.strpath}
+        pytool.make_tool(**kwa)
+        assert src.read() == trg.read()
+
+        lines = src.readlines()
+        lines.append("# This is an extra comment at the end.\n")
+        lines.append("# And another.\n")
+        src.write("".join(lines))
+
+        assert src.read() != trg.read()
+        kwa = {'d': False,
+               'program': False,
+               'tool': True,
+               'PATH': trg2.strpath}
+        pytool.make_tool(**kwa)
+        assert src.read() == trg2.read()
 
 
 # -----------------------------------------------------------------------------
