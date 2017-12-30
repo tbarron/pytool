@@ -109,7 +109,7 @@ def test_pytool_ini_home_nodir(tmpdir):
     """
     homedir = tmpdir.join("home")
     ptdir = homedir.join(".pytool")
-    with tbx.envset(HOME=homedir.strpath):
+    with tbx.envset(HOME=homedir.strpath, PYTOOL_DIR=None):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
@@ -126,7 +126,7 @@ def test_pytool_ini_home_no_pt(tmpdir):
     homedir = tmpdir.join("home")
     homedir.ensure(dir=True)
     ptdir = homedir.join(".pytool")
-    with tbx.envset(HOME=homedir.strpath):
+    with tbx.envset(HOME=homedir.strpath, PYTOOL_DIR=None):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
@@ -142,7 +142,7 @@ def test_pytool_ini_home_noini(tmpdir):
     homedir = tmpdir.join("home")
     ptdir = homedir.join(".pytool")
     ptdir.ensure(dir=True)
-    with tbx.envset(HOME=homedir.strpath):
+    with tbx.envset(HOME=homedir.strpath, PYTOOL_DIR=None):
         with pytest.raises(FileNotFoundError) as err:
             path = py.path.local(pytool.ini_path())
             assert path.basename == mcat['ptini']
@@ -160,7 +160,7 @@ def test_pytool_ini_home_found(tmpdir):
     ptdir = homedir.join(".pytool")
     ptfile = ptdir.join("pytool.ini")
     ptfile.ensure(dir=False)
-    with tbx.envset(HOME=homedir.strpath):
+    with tbx.envset(HOME=homedir.strpath, PYTOOL_DIR=None):
         path = py.path.local(pytool.ini_path())
         assert path.basename == mcat['ptini']
         assert path.strpath == ptfile.strpath
@@ -308,7 +308,7 @@ def test_pytool_initialize_homedir_scratch(tmpdir):
     $HOME.
     """
     hdir = tmpdir.join("home")
-    with tbx.envset(HOME=hdir.strpath):
+    with tbx.envset(HOME=hdir.strpath, PYTOOL_DIR=None):
         with pytest.raises(FileNotFoundError) as err:
             pytool.initialize()
     assert hdir.strpath in str(err)
@@ -325,7 +325,7 @@ def test_pytool_initialize_homedir_create(tmpdir, fx_tmpl):
     hdir = tmpdir.join("home")
     hdir.ensure(dir=True)
     ptdir = hdir.join(mcat['dot_pt'])
-    with tbx.envset(HOME=hdir.strpath):
+    with tbx.envset(HOME=hdir.strpath, PYTOOL_DIR=None):
         pytool.initialize()
     for item in fx_tmpl:
         assert ptdir.join(item).exists()
@@ -338,7 +338,7 @@ def test_pytool_initialize_homedir_isfile(tmpdir):
     """
     hdir = tmpdir.join("home")
     hdir.ensure(dir=False)
-    with tbx.envset(HOME=hdir.strpath):
+    with tbx.envset(HOME=hdir.strpath, PYTOOL_DIR=None):
         with pytest.raises(FileExistsError) as err:
             pytool.initialize()
     assert hdir.strpath in str(err)
@@ -355,7 +355,7 @@ def test_pytool_initialize_homedir_pt_isfile(tmpdir):
     hdir.ensure(dir=True)
     ptdir = hdir.join(mcat['dot_pt'])
     ptdir.ensure(dir=False)
-    with tbx.envset(HOME=hdir.strpath):
+    with tbx.envset(HOME=hdir.strpath, PYTOOL_DIR=None):
         with pytest.raises(FileExistsError) as err:
             pytool.initialize()
     assert ptdir.strpath in str(err)
@@ -408,6 +408,10 @@ def test_pytool_tool(tmpdir):
         pytool.make_tool(**kwa)
         assert src.read() == trg.read()
 
+        assert "from docopt_dispatch import dispatch" in src.read()
+        assert "dispatch(__doc__)" in src.read()
+        assert "@dispatch.on(" in src.read()
+
         lines = src.readlines()
         lines.append("# This is an extra comment at the end.\n")
         lines.append("# And another.\n")
@@ -438,7 +442,7 @@ def test_version():
     (pytool.file_prog_py,  ['impsys', 'defmn', 'triquo', 'where',
                             'ifneqm', 'callmain']),
     (pytool.file_tool_py,  ['usage', 'cmdline', 'triquo', 'options', 'debug',
-                            'impdd', 'impsys', 'defmn', 'where']),
+                            'impdd', 'impsys', 'defmn', 'dispatch', 'handle']),
     (pytool.file_init_py,  ['impsys', 'defmn', 'triquo', 'where',
                             'ifneqm', 'callmain']),
     (pytool.file_readme,   ['title',
