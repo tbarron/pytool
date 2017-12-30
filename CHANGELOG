@@ -1,3 +1,11 @@
+0.0.6
+ - Correct tests that were assuming (possibly mistakenly) that PYTOOL_DIR
+   is unset
+ - Enhance how test_pytool_tool() checks the 'pytool tool' output
+ - Add tool code to README.md, update the deployability test
+ - Update pytest.ini to not descend .pytool
+ - Correct pytool code for constructing tool programs
+
 0.0.5
  - Correct test and code for 'pytool program <path>'
  - Write test and code for 'pytool tool <path>'
