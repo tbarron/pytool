@@ -50,6 +50,32 @@ The following code is written into the file at PATH:
 
 The following code is written into the file at PATH:
 
+    """
+    Usage:
+        prog cmd [-d] ARG ARG ...
+
+    Options:
+        -d      use the debugger
+    """
+    from docopt_dispatch import dispatch
+    import sys
+
+    # -----------------------------------------------------------------------------
+    def main():
+        """
+        main entrypoint
+        """
+        dispatch(__doc__)
+
+    # -----------------------------------------------------------------------------
+    @dispatch.on('cmd')
+    def function_name(**kwa):
+        print("Handle 'prog cmd ARGS' here")
+
+    # -----------------------------------------------------------------------------
+    if __name__ == "__main__":
+        main()
+
 
 ### Full Python Layout Project
 
@@ -139,13 +165,18 @@ These are all things that can be checked in a test.
         Check current version against last git tag and check for outstanding
         untracked files
         """
-        result = tbx.run("git status --porc")
-        assert "" == result.decode()
-        result = tbx.run("git tag")
-        tagl = result.decode().strip().split("\n")
-        assert version._v == tagl[-1]
-        result = tbx.run("git reflog -1 {}".format(version._v))
-        tagref = result.decode().strip()
-        result = tbx.run("git reflog -1 HEAD")
-        headref = result.decode().split()[0]
-        assert headref == tagref
+        r = Repo('.')
+        # Check for untracked files
+        assert [] == r.untracked_files, "You have untracked files"
+
+        # Check for staged but uncommitted updates
+        assert [] == r.index.diff(r.head.commit), "You have staged updates"
+
+        # Check for uncommitted updates
+        assert [] == r.index.diff(None), "You have uncommited changes"
+
+        # Check that the current version matches the latest tag
+        assert version._v == str(r.tags[-1]), "Version does not match tag"
+
+        # Check that the latest tag points at HEAD
+        assert str(r.head.commit) == str(r.tags[-1].commit), "Tag != HEAD"
