@@ -60,6 +60,17 @@ def main():
 
 
 # -----------------------------------------------------------------------------
+@dispatch.on('project')
+def make_project(**kwa):
+    """
+    Create a project directory
+    """
+    if kwa['d']:
+        pdb.set_trace()
+    create_project(kwa['PATH'])
+
+
+# -----------------------------------------------------------------------------
 @dispatch.on('program')
 def make_program(**kwa):
     """
@@ -91,6 +102,28 @@ def create_prog_tool(src, trg):
     pysrc = tmpldir.join(src)
     pytrg = py.path.local(trg)
     pysrc.copy(pytrg)
+
+
+# -----------------------------------------------------------------------------
+def create_project(trgdir_s):
+    """
+    Create directory if it doesn't exist, then populate the template files
+    """
+    cfg = initialize()
+    tmpldir = py.path.local(cfg.get(mcat['pytool'], 'templates_dir'))
+    prjdir = tmpldir.join("prjdir")
+
+    trgdir = py.path.local(trgdir_s)
+    pdir = trgdir.join(trgdir.basename)
+
+    for item in prjdir.visit(rec=True):
+        relpath = item.strpath.replace(prjdir.strpath, "")
+        trg = trgdir.join(relpath.replace('prjdir', pdir.basename))
+        if item.isfile():
+            py.path.local(trg.dirname).ensure(dir=True)
+            item.copy(trg)
+        elif item.isdir():
+            trg.ensure(dir=True)
 
 
 # -----------------------------------------------------------------------------
