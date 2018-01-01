@@ -427,6 +427,43 @@ def test_pytool_tool(tmpdir):
 
 
 # -----------------------------------------------------------------------------
+def test_pytool_project(tmpdir, fx_tmpl):
+    """
+    Test 'pytool project PATH'
+    """
+    ptdir = tmpdir.join(".pytool")
+    srcdir = ptdir.join("templates/prjdir")
+    trgdir = tmpdir.join("project")
+    trgdir2 = tmpdir.join("project_2")
+    with tbx.envset(PYTOOL_DIR=ptdir.strpath):
+        kwa = {'d': False,
+               'program': False,
+               'tool': False,
+               'project': True,
+               'PATH': trgdir.strpath}
+        pytool.make_project(**kwa)
+
+        # check contents of directory *trg*
+        check_proj_files(ptdir, trgdir, fx_tmpl)
+
+        # Update README.md and verify that the copy doesn't match
+        src = srcdir.join("README.md")
+        lines = src.readlines()
+        lines.append("This is an extra line at the end.\n")
+        lines.append("And another.\n")
+        src.write("".join(lines))
+        trg = trgdir.join("README.md")
+        assert src.read() != trg.read()
+
+        # call make_program to populate *trg2*
+        kwa['PATH'] = trgdir2.strpath
+        pytool.make_project(**kwa)
+
+        # check contents of directory *trg2*
+        check_proj_files(ptdir, trgdir2, fx_tmpl)
+
+
+# -----------------------------------------------------------------------------
 def test_version():
     """
     Test 'pytool version'
@@ -476,6 +513,23 @@ def test_deployable():
     assert version._v == str(r.tags[-1]), "Version does not match tag"
 
     assert str(r.head.commit) == str(r.tags[-1].commit), "Tag != HEAD"
+
+
+# -----------------------------------------------------------------------------
+def check_proj_files(srcdir, trgdir, flist):
+    """
+    Check that 'prjdir' files in flist were copied properly from srcdir to
+    trgdir
+    """
+    trgroot = py.path.local(trgdir.dirname)
+    plist = [(d, d.replace('templates/prjdir', trgdir.basename))
+             for d in flist if 'prjdir' in d]
+    for sname, tname in plist:
+        src = srcdir.join(sname)
+        if src.isdir():
+            continue
+        trg = trgroot.join(tname.replace('prjdir', trgdir.basename))
+        assert src.read() == trg.read()
 
 
 # -----------------------------------------------------------------------------
