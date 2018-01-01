@@ -1,3 +1,6 @@
+0.0.7
+ - Write test and implementation code for 'pytool project PATH'
+
 0.0.6
  - Correct tests that were assuming (possibly mistakenly) that PYTOOL_DIR
    is unset
