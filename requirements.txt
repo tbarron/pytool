@@ -1,0 +1,10 @@
+docopt==0.6.2
+docopt-dispatch==0.0.2
+gitdb2==2.0.3
+GitPython==2.1.8
+pexpect==4.3.1
+ptyprocess==0.5.2
+py==1.5.2
+-e git+git@github.com:tbarron/pytool.git@2ba573e14e5e741c4af484b4f35b9a71322957c7#egg=pytool
+smmap2==2.0.3
+tbx==1.0.2
