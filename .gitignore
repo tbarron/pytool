@@ -3,6 +3,8 @@
 .eggs
 .mypy_cache
 .env
+.\#*
+\#*
 DODO
 __pycache__
 venv
