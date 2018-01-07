@@ -1,4 +1,3 @@
-from git import Repo
 import py
 import pytest
 import re
@@ -7,6 +6,11 @@ import pytool
 from pytool.msgcat import mcat
 from pytool import version
 import tbx
+skip_deployable = False
+try:
+    from git import Repo
+except ImportError:
+    skip_deployable = True
 
 
 # -----------------------------------------------------------------------------
@@ -505,6 +509,8 @@ def test_deployable():
     Check current version against last git tag and check for outstanding
     untracked files
     """
+    if skip_deployable:
+        pytest.skip()
     r = Repo('.')
     assert [] == r.untracked_files, "You have untracked files"
     assert [] == r.index.diff(r.head.commit), "You have staged updates"
