@@ -268,14 +268,20 @@ def test_pytool_load_cfg_nosuch(tmpdir):
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_load_cfg_exist(tmpdir):
+def test_pytool_load_cfg_exist(tmpdir, capsys):
     """
     Attempting to load config from a real file should work
+
+    When setup_config_dir() runs, it should tell the user about creating the
+    config dir.
     """
     wdir = tmpdir.join(mcat['pytool'])
     tdir = wdir.join(mcat['tmpl'])
     with tbx.envset(PYTOOL_DIR=wdir.strpath):
         pytool.setup_config_dir()
+        out, err = capsys.readouterr()
+        assert mcat['stupdir'] in out
+        assert mcat['stupflz'] in out
         cfg = pytool.load_config()
         assert mcat['pytool'] in cfg.sections()
         assert mcat['tmpldir'] in cfg.options(mcat['pytool'])
@@ -283,20 +289,24 @@ def test_pytool_load_cfg_exist(tmpdir):
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_setup_config_dir(tmpdir, fx_tmpl):
+def test_pytool_setup_config_dir(tmpdir, fx_tmpl, capsys):
     """
     pytool.setup_config_dir() should create cfgdir() if necessary then populate
-    it
+    it. When setup_config_dir() runs, it should tell the user about creating
+    the config dir.
     """
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
         pytool.setup_config_dir()
+        out, err = capsys.readouterr()
+        assert mcat['stupdir'] in out
+        assert mcat['stupflz'] in out
     for item in fx_tmpl:
         assert ptdir.join(item).exists()
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_initialize_envdir_scratch(tmpdir, fx_tmpl):
+def test_pytool_initialize_envdir_scratch(tmpdir, fx_tmpl, capsys):
     """
     With PYTOOL_DIR set but the directory not existing, pytool.initialize()
     should mkdir $PYTOOL_DIR, then write $PYTOOL_DIR/pytool.ini,
@@ -305,13 +315,16 @@ def test_pytool_initialize_envdir_scratch(tmpdir, fx_tmpl):
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
         pytool.initialize()
+        out, err = capsys.readouterr()
+        assert mcat['stupdir'] in out
+        assert mcat['stupflz'] in out
     assert ptdir.isdir()
     for item in fx_tmpl:
         assert ptdir.join(item).exists()
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_initialize_envdir_create(tmpdir, fx_tmpl):
+def test_pytool_initialize_envdir_create(tmpdir, fx_tmpl, capsys):
     """
     With PYTOOL_DIR set and created, pytool.initialize() should create
     pytool.ini, templates/, etc.
@@ -320,6 +333,8 @@ def test_pytool_initialize_envdir_create(tmpdir, fx_tmpl):
     ptdir.ensure(dir=True)
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
         pytool.initialize()
+        out, err = capsys.readouterr()
+        assert mcat['stupflz'] in out
     for item in fx_tmpl:
         assert ptdir.join(item).exists()
 
@@ -355,7 +370,7 @@ def test_pytool_initialize_homedir_scratch(tmpdir):
 
 
 # -----------------------------------------------------------------------------
-def test_pytool_initialize_homedir_create(tmpdir, fx_tmpl):
+def test_pytool_initialize_homedir_create(tmpdir, fx_tmpl, capsys):
     """
     With PYTOOL_DIR unset, HOME set and existing, but no .pytool directory in
     place, pytool.initialize() should create $HOME/.pytool, and write
@@ -366,6 +381,10 @@ def test_pytool_initialize_homedir_create(tmpdir, fx_tmpl):
     ptdir = hdir.join(mcat['dot_pt'])
     with tbx.envset(HOME=hdir.strpath, PYTOOL_DIR=None):
         pytool.initialize()
+        out, err = capsys.readouterr()
+        assert mcat['stupdir'] in out
+        assert mcat['stupmv'] in out
+        assert mcat['stupflz'] in out
     for item in fx_tmpl:
         assert ptdir.join(item).exists()
 
