@@ -243,11 +243,16 @@ def setup_config_dir():
         raise FileNotFoundError("{} {}".format(hdir.strpath, mcat['notdir']))
 
     try:
+        if not cdir.exists():
+            print("{} '{}'".format(mcat['stupdir'], cdir.strpath))
+            if src == mcat['lchome']:
+                print(mcat['stupmv'])
         cdir.ensure(dir=True)
     except py.error.EEXIST:
         msg = "{} {}".format(cdir.strpath, mcat['isfile'])
         raise FileExistsError(msg)
 
+    print("{} in {}".format(mcat['stupflz'], cdir.strpath))
     ptini = cdir.join(mcat['ptini'])
     ptini.write(file_pytool_ini())
 
