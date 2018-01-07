@@ -31,7 +31,7 @@ def test_runnable():
     sresult = bresult.decode()
     assert mcat['trace'] not in sresult
     assert mcat['cmd'] not in sresult
-    assert mcat['skel'] in sresult
+    assert pytool.__doc__.strip() == sresult.strip()
 
 
 # -----------------------------------------------------------------------------
@@ -40,7 +40,33 @@ def test_pytool_help():
     Verify that 'pytool help' runs properly
     """
     result = tbx.run(mcat['pthlpcmd']).decode().strip()
-    assert result == tbx.run(mcat['pthelp']).decode().strip()
+    assert mcat['trace'] not in result
+    assert mcat['cmd'] not in result
+    assert pytool.__doc__.strip() == result.strip()
+
+
+# -----------------------------------------------------------------------------
+@pytest.mark.parametrize("hkey, tkey", [
+    ('hlpprog', 'hlpprogtxt'),
+    ('hlpproj', 'hlpprojtxt'),
+    ('hlptool', 'hlptooltxt'),
+    ])
+def test_pytool_help_cmd(hkey, tkey):
+    exp = mcat[tkey].split("\n")
+    result = tbx.run(mcat[hkey]).decode().strip()
+    result = re.sub("\s\s+", " ", " ".join(result.split("\n")))
+    for line in exp:
+        assert line.strip() in result
+
+
+# -----------------------------------------------------------------------------
+def test_pytool_help_nosuch():
+    """
+    Verify 'pytool help foobar'
+    """
+    result = tbx.run(mcat['hlpnone']).decode().strip()
+    assert mcat['unknown'] in result
+    assert mcat['nonesuch'] in result
 
 
 # -----------------------------------------------------------------------------
