@@ -60,6 +60,17 @@ def main():
 
 
 # -----------------------------------------------------------------------------
+@dispatch.on('help')
+def pytool_help(**kwa):
+    """
+    Same as 'pytool --help'
+    """
+    if kwa['d']:
+        pdb.set_trace()
+    print(__doc__)
+
+
+# -----------------------------------------------------------------------------
 @dispatch.on('project')
 def make_project(**kwa):
     """
