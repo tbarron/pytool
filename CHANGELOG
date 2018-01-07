@@ -1,13 +1,17 @@
-0.0.9
+0.0.10
+ - When creating the config directory and files, tell the user what we're
+   doing and explain how to move the config dir if desired
+
+0.0.9          2018.0107 14:43:58
  - Support comamnd 'pytool help [COMMAND]'
 
-0.0.8
+0.0.8          2018.0107 08:20:35
  - Install dependencies as part of install operation
  - Skip test_deploy if GitPython not importable
  - version.py sets __version__ rather than _v
  - Update Makefile to clean up __pycache__ directories
 
-0.0.7          2017.0101 18:32:17
+0.0.7          2018.0101 18:32:17
  - Write test and implementation code for 'pytool project PATH'
 
 0.0.6          2017.1229 19:45:24
