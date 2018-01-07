@@ -63,11 +63,20 @@ def main():
 @dispatch.on('help')
 def pytool_help(**kwa):
     """
-    Same as 'pytool --help'
+    With a trailing COMMAND value, provide more info about that command
     """
     if kwa['d']:
         pdb.set_trace()
-    print(__doc__)
+    if 'program' == kwa['COMMAND']:
+        print(mcat['hlpprogtxt'])
+    elif 'project' == kwa['COMMAND']:
+        print(mcat['hlpprojtxt'])
+    elif 'tool' == kwa['COMMAND']:
+        print(mcat['hlptooltxt'])
+    else:
+        if kwa['COMMAND']:
+            print("{}: {}".format(mcat['unknown'], kwa['COMMAND']))
+        print(__doc__)
 
 
 # -----------------------------------------------------------------------------
