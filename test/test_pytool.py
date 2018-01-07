@@ -35,6 +35,15 @@ def test_runnable():
 
 
 # -----------------------------------------------------------------------------
+def test_pytool_help():
+    """
+    Verify that 'pytool help' runs properly
+    """
+    result = tbx.run(mcat['pthlpcmd']).decode()
+    assert result == tbx.run(mcat['pthelp'])
+
+
+# -----------------------------------------------------------------------------
 def test_pytool_cfgdir_neither():
     """
     pytool.cfgdir should return PYTOOL_DIR if set, else HOME/.pytool if HOME
