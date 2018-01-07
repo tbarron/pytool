@@ -1,3 +1,6 @@
+0.0.9
+ - Support comamnd 'pytool help [COMMAND]'
+
 0.0.8
  - Install dependencies as part of install operation
  - Skip test_deploy if GitPython not importable
