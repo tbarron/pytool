@@ -134,7 +134,7 @@ def show_version(**kwa):
     """
     if kwa['d']:
         pdb.set_trace()
-    print("pytool version {}".format(version._v))
+    print("pytool version {}".format(version.__version__))
 
 
 # -----------------------------------------------------------------------------
