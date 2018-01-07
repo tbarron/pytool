@@ -39,8 +39,8 @@ def test_pytool_help():
     """
     Verify that 'pytool help' runs properly
     """
-    result = tbx.run(mcat['pthlpcmd']).decode()
-    assert result == tbx.run(mcat['pthelp'])
+    result = tbx.run(mcat['pthlpcmd']).decode().strip()
+    assert result == tbx.run(mcat['pthelp']).decode().strip()
 
 
 # -----------------------------------------------------------------------------
