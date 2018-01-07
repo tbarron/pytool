@@ -570,9 +570,13 @@ def test_deployable():
     assert [] == r.index.diff(r.head.commit), "You have staged updates"
     assert [] == r.index.diff(None), "You have uncommited changes"
 
-    assert version.__version__ == str(r.tags[-1]), "Version does not match tag"
+    stags = sorted(r.tags,
+                   key=lambda x: x.commit.committed_date,
+                   reverse=True)
 
-    assert str(r.head.commit) == str(r.tags[-1].commit), "Tag != HEAD"
+    assert version.__version__ == str(stags[0]), "Version does not match tag"
+
+    assert str(r.head.commit) == str(stags[0].commit), "Tag != HEAD"
 
 
 # -----------------------------------------------------------------------------
