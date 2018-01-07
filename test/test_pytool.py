@@ -141,7 +141,7 @@ def test_pytool_ini_unset(tmpdir):
 def test_pytool_ini_home_nodir(tmpdir):
     """
     pytool.ini_path() should accurately raise a FileNotFoundError when
-    $PYTOOL_DIR is not set and $HOME does not contain .pytool/pytest.ini
+    $PYTOOL_DIR is not set and $HOME does not contain .pytool/pytool.ini
 
     What about $HOME exists but .pytool does not?
     What about $HOME/.pytool exists but pytool.ini does not?
@@ -209,7 +209,7 @@ def test_pytool_ini_home_found(tmpdir):
 def test_pytool_ini_envdir_nodir(tmpdir):
     """
     pytool.ini_path() should accurately raise a FileNotFoundError when
-    $PYTOOL_DIR is set but does not contain pytest.ini
+    $PYTOOL_DIR is set but does not contain pytool.ini
     """
     ptdir = tmpdir.join("envdir")
     with tbx.envset(PYTOOL_DIR=ptdir.strpath):
@@ -224,7 +224,7 @@ def test_pytool_ini_envdir_nodir(tmpdir):
 def test_pytool_ini_envdir_nofile(tmpdir):
     """
     pytool.ini_path() should accurately raise a FileNotFoundError when
-    $PYTOOL_DIR is set but does not contain pytest.ini
+    $PYTOOL_DIR is set but does not contain pytool.ini
 
     What about $PYTOOL_DIR exists but pytool.ini does not?
     """
