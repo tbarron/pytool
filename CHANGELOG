@@ -1,7 +1,13 @@
-0.0.7
+0.0.8
+ - Install dependencies as part of install operation
+ - Skip test_deploy if GitPython not importable
+ - version.py sets __version__ rather than _v
+ - Update Makefile to clean up __pycache__ directories
+
+0.0.7          2017.0101 18:32:17
  - Write test and implementation code for 'pytool project PATH'
 
-0.0.6
+0.0.6          2017.1229 19:45:24
  - Correct tests that were assuming (possibly mistakenly) that PYTOOL_DIR
    is unset
  - Enhance how test_pytool_tool() checks the 'pytool tool' output
@@ -9,23 +15,23 @@
  - Update pytest.ini to not descend .pytool
  - Correct pytool code for constructing tool programs
 
-0.0.5
+0.0.5          2017.1229 18:42:23
  - Correct test and code for 'pytool program <path>'
  - Write test and code for 'pytool tool <path>'
  - Update README.md to document pytool usage
 
-0.0.4
+0.0.4          2017.1227 14:30:28
  - Add test and code for 'pytool program <path>'
 
-0.0.3
+0.0.3          2017.1226 21:41:44
  - Squared away --dbg option for now but you have to specify -s along with
    it :(
 
-0.0.2
+0.0.2          2017.1226 21:27:16
  - Messing around with --dbg option
  - Switch to GitPython api rather than calling git externally
 
-0.0.1
+0.0.1          2017.1226 13:18:03
  - Started the project
  - setup.py, pytool/__init__.py, runnability, first test
  - flake8 test
