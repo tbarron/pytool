@@ -15,9 +15,6 @@ setup(name="pytool",
       install_requires=[
           'docopt_dispatch',
           'py',
-          'pytest',
-          'GitPython',
-          'tbx',
       ],
       packages=['pytool'],
       entry_points={'console_scripts': ["pytool = pytool:main"]}
